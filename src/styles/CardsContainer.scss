@@ -1,0 +1,22 @@
+img.pokeball-spinner {
+  transform: scale(1);
+  animation: rotateSpinner 2s infinite linear;
+}
+
+section.cards-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  width: 100vw;
+  justify-items: center;
+}
+
+@keyframes rotateSpinner {
+  from {
+    transform: rotate(0deg) scale(0.5);
+  }
+  to {
+    transform: rotate(360deg) scale(0.5);
+  }
+}
