@@ -1,3 +1,8 @@
+img.pokeball-spinner {
+  transform: scale(1);
+  animation: rotateSpinner 2s infinite linear;
+}
+
 section.pokemon-card {
   position: relative;
   display: flex;

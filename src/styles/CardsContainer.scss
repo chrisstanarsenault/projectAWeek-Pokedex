@@ -1,8 +1,3 @@
-img.pokeball-spinner {
-  transform: scale(1);
-  animation: rotateSpinner 2s infinite linear;
-}
-
 section.cards-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

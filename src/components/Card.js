@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import "../styles/Card.scss";
+import Pokeball from "../images/pokeballLoader.png";
+
 const Pokedex = require("pokeapi-js-wrapper");
 
 export default function Card(props) {
   const [pokeData, setPokeData] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const P = new Pokedex.Pokedex();
   const { name, url } = props.pokeInfo;
   const typeColorList = {
@@ -29,7 +31,7 @@ export default function Card(props) {
     P.getPokemonByName(pokemon) // with Promise
       .then(function (response) {
         setPokeData(response);
-        props.areCardsLoaded();
+        setIsLoading((prev) => !prev);
       });
   };
 
@@ -38,29 +40,32 @@ export default function Card(props) {
   };
 
   useEffect(() => {
-    props.areCardsLoaded();
     getPoke(name);
   }, []);
 
-  return (
-    <section
-      className="pokemon-card"
-      style={{
-        backgroundColor: `${typeColorList[pokeData.types[0].type.name]}`,
-      }}
-    >
-      <div>
-        <span>{pokeData.id.toString().padStart(3, "0")}</span>
-        <span>{pokeData.types[0].type.name}</span>
-      </div>
+  if (pokeData) {
+    return (
+      <section
+        className="pokemon-card"
+        style={{
+          backgroundColor: `${typeColorList[pokeData.types[0].type.name]}`,
+        }}
+      >
+        <div>
+          <span>{pokeData.id.toString().padStart(3, "0")}</span>
+          <span>{pokeData.types[0].type.name}</span>
+        </div>
 
-      <div className="pokemon-image-container">
-        <img
-          src={pokeData.sprites.other["official-artwork"].front_default}
-          alt={pokeData.name}
-        />
-      </div>
-      <h2>{uppercaseFirstLetter(name)}</h2>
-    </section>
-  );
+        <div className="pokemon-image-container">
+          <img
+            src={pokeData.sprites.other["official-artwork"].front_default}
+            alt={pokeData.name}
+          />
+        </div>
+        <h2>{uppercaseFirstLetter(name)}</h2>
+      </section>
+    );
+  } else {
+    return <img className="pokeball-spinner" src={Pokeball} alt="pokeball" />;
+  }
 }
