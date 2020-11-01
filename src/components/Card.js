@@ -7,9 +7,10 @@ const Pokedex = require("pokeapi-js-wrapper");
 
 export default function Card(props) {
   const [pokeData, setPokeData] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const P = new Pokedex.Pokedex();
-  const { name, url } = props.pokeInfo;
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { name } = props.pokeInfo;
+  const { openModal, getPokeData } = props;
   const typeColorList = {
     fire: "#FDDFDF",
     grass: "#DEFDE0",
@@ -27,26 +28,31 @@ export default function Card(props) {
     normal: "#F5F5F5",
   };
 
-  const getPoke = (pokemon) => {
-    P.getPokemonByName(pokemon) // with Promise
-      .then(function (response) {
-        setPokeData(response);
-        setIsLoading((prev) => !prev);
-      });
-  };
-
   const uppercaseFirstLetter = (name) => {
     return name[0].toUpperCase() + name.slice(1);
   };
 
-  useEffect(() => {
-    getPoke(name);
-  }, []);
+  const getDataAndOpenModal = (data) => {
+    getPokeData(data);
+    openModal();
+  };
 
-  if (pokeData) {
+  useEffect(() => {
+    const P = new Pokedex.Pokedex();
+    const getPoke = async (pokemon) => {
+      await P.getPokemonByName(pokemon).then((response) => {
+        setPokeData(response);
+        setIsLoading((prev) => !prev);
+      });
+    };
+    getPoke(name);
+  }, [name]);
+
+  if (!isLoading) {
     return (
       <section
         className="pokemon-card"
+        onClick={() => getDataAndOpenModal(pokeData)}
         style={{
           backgroundColor: `${typeColorList[pokeData.types[0].type.name]}`,
         }}

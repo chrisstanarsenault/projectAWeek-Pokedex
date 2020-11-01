@@ -5,6 +5,11 @@ section.cards-container {
   grid-row-gap: 10px;
   width: 100vw;
   justify-items: center;
+
+  & .input {
+    grid-column-start: 2;
+    grid-column-end: 5;
+  }
 }
 
 @keyframes rotateSpinner {
